@@ -1,0 +1,29 @@
+services:
+  # 개발용: 코드 수정하면 바로 반영  →  http://localhost:5173
+  dev:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules   # 컨테이너의 node_modules 유지
+    profiles: ["dev"]
+
+  # 배포 확인용: 빌드 결과를 nginx로 서빙  →  http://localhost:8080
+  prod:
+    build:
+      context: .
+      target: prod
+    ports:
+      - "8080:80"
+    profiles: ["prod"]
+
+  # 테스트만 실행
+  test:
+    build:
+      context: .
+      target: dev
+    command: npm test
+    profiles: ["test"]
